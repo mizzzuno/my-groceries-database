@@ -15,7 +15,7 @@ export default function BasicSelect() {
   };
 
   return (
-    <Box sx={{ maxWidth: 200 }} className="m-4 max-w-xs">
+    <Box sx={{ maxWidth: 320, m: 2 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">
           比較する商品を選択
