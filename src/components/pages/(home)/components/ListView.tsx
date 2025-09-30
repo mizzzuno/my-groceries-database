@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,7 +11,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 // 表示したい列: 購入日, 値段, 購入店舗
 interface Data {
@@ -153,9 +151,6 @@ function EnhancedTableToolbar() {
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("price");
-  const [dense, setDense] = React.useState(false);
-  const theme = useTheme();
-  const isSm = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -164,10 +159,6 @@ export default function EnhancedTable() {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-  };
-
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
   };
 
   const visibleRows = React.useMemo(
