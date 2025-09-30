@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -204,7 +206,7 @@ export default function EnhancedTable() {
                         fontVariantNumeric: "tabular-nums",
                       }}
                     >
-                      {row.price.toLocaleString()}円
+                      {row.price.toLocaleString("ja-JP")}円
                     </TableCell>
                     <TableCell
                       align="left"
