@@ -8,10 +8,10 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 export default function BasicSelect() {
-  const [age, setAge] = React.useState("");
+  const [groceries, setGroceries] = React.useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+    setGroceries(event.target.value as string);
   };
 
   return (
@@ -23,8 +23,8 @@ export default function BasicSelect() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={age}
-          label="Age"
+          value={groceries}
+          label="比較する商品を選択"
           onChange={handleChange}
         >
           <MenuItem value="卵">卵</MenuItem>
