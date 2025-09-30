@@ -7,9 +7,15 @@ const ListView = dynamic(
   { ssr: false },
 );
 
+const BasicSelect = dynamic(
+  () => import("@/components/pages/(home)/components/Selector"),
+  { ssr: false },
+);
+
 export default function HomePage() {
   return (
     <>
+      <BasicSelect />
       <ListView />
     </>
   );
