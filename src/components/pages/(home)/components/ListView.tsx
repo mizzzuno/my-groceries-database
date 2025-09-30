@@ -11,8 +11,6 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import { visuallyHidden } from "@mui/utils";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -77,7 +75,6 @@ const headCells: readonly HeadCell[] = [
   {
     id: "purchaseDate",
     numeric: false,
-    // 左に貼り付き過ぎるのを防ぐため padding を有効化
     disablePadding: false,
     label: "購入日",
   },
@@ -183,17 +180,14 @@ export default function EnhancedTable() {
       <Paper sx={{ width: "100%", mb: 2, overflowX: "auto" }}>
         <EnhancedTableToolbar />
         <TableContainer>
-          <Table
-            aria-labelledby="tableTitle"          
-          >
-            
+          <Table aria-labelledby="tableTitle">
             <EnhancedTableHead
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {visibleRows.map((row, index) => {
+              {visibleRows.map((row) => {
                 return (
                   <TableRow
                     hover
@@ -238,10 +232,6 @@ export default function EnhancedTable() {
           </Table>
         </TableContainer>
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 }
