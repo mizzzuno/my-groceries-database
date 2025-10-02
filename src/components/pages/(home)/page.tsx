@@ -5,12 +5,12 @@ import AddButton from "@/components/pages/(home)/components/AddButton";
 
 const ListView = dynamic(
   () => import("@/components/pages/(home)/components/ListView"),
-  { ssr: false }
+  { ssr: false },
 );
 
 const BasicSelect = dynamic(
   () => import("@/components/pages/(home)/components/Selector"),
-  { ssr: false }
+  { ssr: false },
 );
 
 export default function HomePage() {
