@@ -1,8 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import AddButton from "@/components/pages/(home)/components/AddButton";
-import BasicCard from "@/components/pages/(home)/components/Card";
+// import AddButton from "@/components/pages/(home)/components/AddButton";
+// import BasicCard from "@/components/pages/(home)/components/Card";
 import BasicModal from "@/components/pages/(home)/components/Modal";
 
 const ListView = dynamic(
