@@ -4,7 +4,6 @@ import AddIcon from "@mui/icons-material/Add";
 
 interface AddButtonProps {
   onClick?: () => void;
-  children?: React.ReactNode;
 }
 
 export default function AddButton({ onClick }: AddButtonProps) {
