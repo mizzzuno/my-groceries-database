@@ -9,8 +9,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 
@@ -144,20 +142,7 @@ function EnhancedTableHead(props: EnhancedTableHeadProps) {
     </TableHead>
   );
 }
-function EnhancedTableToolbar() {
-  return (
-    <Toolbar sx={{ pl: { sm: 2 }, pr: { xs: 1, sm: 1 } }}>
-      <Typography
-        sx={{ flex: "1 1 100%" }}
-        variant="h6"
-        id="tableTitle"
-        component="div"
-      >
-        購入履歴
-      </Typography>
-    </Toolbar>
-  );
-}
+
 interface EnhancedTableProps {
   selectedGrocery?: string;
 }
@@ -192,7 +177,7 @@ export default function EnhancedTable({
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2, overflowX: "auto" }}>
-        <EnhancedTableToolbar />
+        {/* <EnhancedTableToolbar /> */}
         <TableContainer>
           <Table aria-labelledby="tableTitle">
             <EnhancedTableHead
