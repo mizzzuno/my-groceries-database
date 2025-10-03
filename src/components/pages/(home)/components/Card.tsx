@@ -1,10 +1,12 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
+import RegisterButton from "./RegisterButton";
 import Typography from "@mui/material/Typography";
+import BasicTextFields from "./BasicTextFields";
+import BasicDatePicker from "./DatePicker";
+import { Dayjs } from "dayjs";
 
 const style = {
   position: "absolute",
@@ -18,36 +20,65 @@ const style = {
   p: 4,
 };
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
+interface BasicCardProps {
+  onClose?: () => void;
+}
 
-export default function BasicCard() {
+export default function BasicCard({ onClose }: BasicCardProps) {
+  const [purchaseDate, setPurchaseDate] = React.useState<Dayjs | null>(null);
+  const [productName, setProductName] = React.useState("");
+  const [storeName, setStoreName] = React.useState("");
+
+  const handleRegister = () => {
+    // 入力された内容をconsole.logで表示
+    console.log("購入データ:", {
+      purchaseDate: purchaseDate?.format("YYYY-MM-DD"),
+      productName,
+      storeName,
+    });
+
+    // Modalを閉じる
+    if (onClose) {
+      onClose();
+    }
+  };
+
+  const handleProductNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setProductName(event.target.value);
+  };
+
+  const handleStoreNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setStoreName(event.target.value);
+  };
+
   return (
     <Card sx={{ minWidth: 275, ...style }}>
       <CardContent>
-        <Typography gutterBottom sx={{ color: "text.secondary", fontSize: 14 }}>
-          Word of the Day
-        </Typography>
         <Typography variant="h5" component="div">
-          be{bull}nev{bull}o{bull}lent
+          購入履歴を登録
         </Typography>
-        <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-          adjective
-        </Typography>
-        <Typography variant="body2">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography>
+        <BasicDatePicker value={purchaseDate} onChange={setPurchaseDate} />
+        <BasicTextFields
+          id="product-name"
+          label="商品名"
+          variant="outlined"
+          value={productName}
+          onChange={handleProductNameChange}
+        />
+        <BasicTextFields
+          id="store-name"
+          label="店舗名"
+          variant="outlined"
+          value={storeName}
+          onChange={handleStoreNameChange}
+        />
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
+        <RegisterButton onClick={handleRegister} />
       </CardActions>
     </Card>
   );

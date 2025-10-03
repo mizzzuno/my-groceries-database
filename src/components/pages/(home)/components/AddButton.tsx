@@ -9,7 +9,7 @@ interface AddButtonProps {
 export default function AddButton({ onClick }: AddButtonProps) {
   return (
     <Button variant="outlined" startIcon={<AddIcon />} onClick={onClick}>
-      Add Data
+      履歴を追加
     </Button>
   );
 }
