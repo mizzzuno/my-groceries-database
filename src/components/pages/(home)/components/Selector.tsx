@@ -17,9 +17,7 @@ export default function BasicSelect() {
   return (
     <Box sx={{ maxWidth: 200 }} className="m-4 max-w-xs">
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">
-          比較する商品を選択
-        </InputLabel>
+        <InputLabel id="demo-simple-select-label">商品を選択</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
