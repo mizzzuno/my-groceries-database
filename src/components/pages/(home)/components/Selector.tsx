@@ -18,15 +18,39 @@ export default function BasicSelect({ value, onChange }: BasicSelectProps) {
   };
 
   return (
-    <Box sx={{ maxWidth: 200 }} className="m-4 max-w-xs">
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">商品を選択</InputLabel>
+    <Box
+      sx={{
+        width: "auto", // 幅を自動調整
+        minWidth: 120,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        mr: 2,
+        mt: 2,
+        mb: 2,
+      }}
+      className="max-w-xs"
+    >
+      <FormControl size="small" sx={{ minWidth: 120 }}>
+        <InputLabel id="demo-simple-select-label" size="small">
+          商品を選択
+        </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={value}
-          label="比較する商品を選択"
+          label="商品を選択"
           onChange={handleChange}
+          size="small"
+          sx={{
+            height: "36px",
+            minWidth: 120,
+            "& .MuiSelect-select": {
+              padding: "6px 14px",
+              display: "flex",
+              alignItems: "center",
+            },
+          }}
         >
           <MenuItem value="all">全て表示</MenuItem>
           <MenuItem value="卵">卵</MenuItem>
