@@ -7,11 +7,14 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-export default function BasicSelect() {
-  const [groceries, setGroceries] = React.useState("");
+interface BasicSelectProps {
+  value: string;
+  onChange: (value: string) => void;
+}
 
+export default function BasicSelect({ value, onChange }: BasicSelectProps) {
   const handleChange = (event: SelectChangeEvent) => {
-    setGroceries(event.target.value as string);
+    onChange(event.target.value as string);
   };
 
   return (
@@ -21,10 +24,11 @@ export default function BasicSelect() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={groceries}
+          value={value}
           label="比較する商品を選択"
           onChange={handleChange}
         >
+          <MenuItem value="all">全て表示</MenuItem>
           <MenuItem value="卵">卵</MenuItem>
           <MenuItem value="牛乳">牛乳</MenuItem>
           <MenuItem value="ハーゲンダッツ">ハーゲンダッツ</MenuItem>

@@ -14,9 +14,10 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 
-// 表示したい列: 購入日, 値段, 購入店舗
+// 表示したい列: 商品名, 購入日, 値段, 購入店舗
 interface Data {
   id: number;
+  productName: string; // 商品名
   purchaseDate: string; // ISO 形式 or 任意の文字列
   price: number; // 値段 (数値)
   store: string; // 購入店舗名
@@ -24,20 +25,21 @@ interface Data {
 
 function createData(
   id: number,
+  productName: string,
   purchaseDate: string,
   price: number,
   store: string,
 ): Data {
-  return { id, purchaseDate, price, store };
+  return { id, productName, purchaseDate, price, store };
 }
 
 // ダミーデータ（必要に応じて API 連携に置き換える）
 const rows: Data[] = [
-  createData(1, "2024-06-01", 480, "スーパーA"),
-  createData(2, "2024-06-02", 1280, "ドラッグストアB"),
-  createData(3, "2024-06-02", 260, "コンビニC"),
-  createData(4, "2024-06-03", 980, "スーパーA"),
-  createData(5, "2024-06-04", 560, "ネットショップD"),
+  createData(1, "卵", "2024-06-01", 480, "スーパーA"),
+  createData(2, "牛乳", "2024-06-02", 1280, "ドラッグストアB"),
+  createData(3, "ハーゲンダッツ", "2024-06-02", 260, "コンビニC"),
+  createData(4, "卵", "2024-06-03", 980, "スーパーA"),
+  createData(5, "牛乳", "2024-06-04", 560, "ネットショップD"),
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -90,9 +92,15 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: "購入店舗",
   },
+  {
+    id: "productName",
+    numeric: false,
+    disablePadding: false,
+    label: "商品名",
+  },
 ];
 
-interface EnhancedTableProps {
+interface EnhancedTableHeadProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     property: keyof Data,
@@ -101,7 +109,7 @@ interface EnhancedTableProps {
   orderBy: string;
 }
 
-function EnhancedTableHead(props: EnhancedTableProps) {
+function EnhancedTableHead(props: EnhancedTableHeadProps) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
@@ -150,7 +158,13 @@ function EnhancedTableToolbar() {
     </Toolbar>
   );
 }
-export default function EnhancedTable() {
+interface EnhancedTableProps {
+  selectedGrocery?: string;
+}
+
+export default function EnhancedTable({
+  selectedGrocery = "",
+}: EnhancedTableProps) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("price");
 
@@ -163,9 +177,16 @@ export default function EnhancedTable() {
     setOrderBy(property);
   };
 
+  const filteredRows = React.useMemo(() => {
+    if (!selectedGrocery || selectedGrocery === "all") {
+      return rows;
+    }
+    return rows.filter((row) => row.productName === selectedGrocery);
+  }, [selectedGrocery]);
+
   const visibleRows = React.useMemo(
-    () => [...rows].sort(getComparator(order, orderBy)),
-    [order, orderBy],
+    () => [...filteredRows].sort(getComparator(order, orderBy)),
+    [order, orderBy, filteredRows],
   );
 
   return (
@@ -217,6 +238,16 @@ export default function EnhancedTable() {
                       }}
                     >
                       {row.store}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {row.productName}
                     </TableCell>
                   </TableRow>
                 );
