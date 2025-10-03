@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import dynamic from "next/dynamic";
 import BasicModal from "@/components/pages/(home)/components/Modal";
 
@@ -14,11 +15,13 @@ const BasicSelect = dynamic(
 );
 
 export default function HomePage() {
+  const [selectedGrocery, setSelectedGrocery] = React.useState("all");
+
   return (
     <>
-      <BasicSelect />
+      <BasicSelect value={selectedGrocery} onChange={setSelectedGrocery} />
       <BasicModal />
-      <ListView />
+      <ListView selectedGrocery={selectedGrocery} />
     </>
   );
 }
