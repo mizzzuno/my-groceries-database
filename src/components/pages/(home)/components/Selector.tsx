@@ -39,7 +39,7 @@ export default function BasicSelect({ value, onChange }: BasicSelectProps) {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={value}
-          label="比較する商品を選択"
+          label="商品を選択"
           onChange={handleChange}
           size="small"
           sx={{
