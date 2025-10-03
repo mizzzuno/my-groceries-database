@@ -1,6 +1,5 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import AddButton from "@/components/pages/(home)/components/AddButton";
 import BasicCard from "@/components/pages/(home)/components/Card";
@@ -25,20 +24,9 @@ export default function BasicModal() {
   return (
     <div>
       <AddButton onClick={handleOpen} />
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-          <BasicCard />
+          <BasicCard onClose={handleClose} />
         </Box>
       </Modal>
     </div>
