@@ -9,7 +9,7 @@ interface AddButtonProps {
 
 export default function AddButton({ onClick }: AddButtonProps) {
   return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+    <Box sx={{ display: "flex", alignItems: "center" }}>
       <Button
         variant="outlined"
         startIcon={<AddIcon />}
