@@ -47,7 +47,7 @@ export default function BasicModal({ trigger, children }: BasicModalProps) {
         children as React.ReactElement<{ onClose?: () => void }>,
         {
           onClose: handleClose,
-        }
+        },
       )
     ) : (
       children

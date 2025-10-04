@@ -44,7 +44,7 @@ export default function BasicCard({
   onUpdate,
 }: BasicCardProps) {
   const [purchaseDate, setPurchaseDate] = React.useState<Dayjs | null>(
-    initialData?.purchaseDate ? dayjs(initialData.purchaseDate) : null
+    initialData?.purchaseDate ? dayjs(initialData.purchaseDate) : null,
   );
   const [productName, setProductName] = React.useState(initialData?.name ?? "");
   const [storeName, setStoreName] = React.useState(initialData?.category ?? "");
@@ -73,13 +73,13 @@ export default function BasicCard({
   };
 
   const handleProductNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setProductName(event.target.value);
   };
 
   const handleStoreNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setStoreName(event.target.value);
   };
