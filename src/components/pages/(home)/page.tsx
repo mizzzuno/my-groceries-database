@@ -20,7 +20,7 @@ export default function HomePage() {
   return (
     <>
       <h1 className="m-4 text-2xl font-bold flex justify-center">
-        購入履歴データベース
+        Smart Shopper
       </h1>
       <div className="flex justify-center items-center">
         <BasicSelect value={selectedGrocery} onChange={setSelectedGrocery} />
