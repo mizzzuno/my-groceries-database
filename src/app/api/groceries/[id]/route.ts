@@ -12,6 +12,10 @@ interface Grocery {
   purchaseDate: string;
 }
 
+type RouteContext = {
+  params?: { id?: string } | Promise<{ id?: string }>;
+};
+
 async function readData(): Promise<Grocery[]> {
   try {
     const raw = await fs.readFile(DATA_PATH, "utf8");
@@ -26,7 +30,7 @@ async function writeData(data: Grocery[]) {
   await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2), "utf8");
 }
 
-export async function DELETE(_req: Request, context: any) {
+export async function DELETE(_req: Request, context: RouteContext) {
   // context.params may be a Promise or an object depending on Next internals.
   const params = await Promise.resolve(context?.params);
   const id = params?.id as string | undefined;
@@ -47,7 +51,7 @@ export async function DELETE(_req: Request, context: any) {
   return new NextResponse(null, { status: 204 });
 }
 
-export async function PUT(req: Request, context: any) {
+export async function PUT(req: Request, context: RouteContext) {
   const params = await Promise.resolve(context?.params);
   const id = params?.id as string | undefined;
   if (!id) {
@@ -73,7 +77,7 @@ export async function PUT(req: Request, context: any) {
     await writeData(data);
 
     return NextResponse.json(updated, { status: 200 });
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: "invalid request" }, { status: 400 });
   }
 }

@@ -28,10 +28,14 @@ export default function BasicModal({ trigger, children }: BasicModalProps) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  type TriggerProps = { onClick?: () => void };
+
   const renderTrigger = () => {
     if (trigger && React.isValidElement(trigger)) {
       // trigger 要素に onClick を注入して開く
-      return React.cloneElement(trigger, { onClick: handleOpen } as any);
+      return React.cloneElement(trigger as React.ReactElement<TriggerProps>, {
+        onClick: handleOpen,
+      });
     }
     // デフォルトは AddButton
     return <AddButton onClick={handleOpen} />;
@@ -39,7 +43,12 @@ export default function BasicModal({ trigger, children }: BasicModalProps) {
 
   const content = children ? (
     React.isValidElement(children) ? (
-      React.cloneElement(children, { onClose: handleClose } as any)
+      React.cloneElement(
+        children as React.ReactElement<{ onClose?: () => void }>,
+        {
+          onClose: handleClose,
+        }
+      )
     ) : (
       children
     )

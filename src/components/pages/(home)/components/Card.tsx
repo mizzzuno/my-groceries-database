@@ -8,6 +8,7 @@ import BasicTextFields from "./BasicTextFields";
 import BasicDatePicker from "./DatePicker";
 import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
+import { Grocery } from "@/hooks/useGroceries";
 import { useGroceryContext } from "@/providers/GroceryDataProvider";
 import PriceInput from "./PriceInput";
 
@@ -34,7 +35,7 @@ interface BasicCardProps {
     purchaseDate?: string; // YYYY-MM-DD
   };
   // 編集時に呼ばれる（存在すれば update 動作、なければ add 動作）
-  onUpdate?: (id: string, data: Partial<any>) => Promise<void>;
+  onUpdate?: (id: string, data: Partial<Grocery>) => Promise<void>;
 }
 
 export default function BasicCard({

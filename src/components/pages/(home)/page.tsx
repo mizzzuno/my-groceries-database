@@ -26,7 +26,7 @@ export default function HomePage() {
         <BasicSelect value={selectedGrocery} onChange={setSelectedGrocery} />
         <BasicModal />
       </div>
-      <ListView selectedGrocery={selectedGrocery} />    
+      <ListView selectedGrocery={selectedGrocery} />
     </>
   );
 }
