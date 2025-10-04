@@ -39,9 +39,6 @@ export default function EditIconButton({
   return (
     <BasicModal trigger={trigger}>
       <BasicCard
-        onClose={() => {
-          /* BasicModal が閉じるのは trigger 側で制御 */
-        }}
         initialData={{ id, name, category, price, purchaseDate }}
         onUpdate={handleUpdate}
       />
