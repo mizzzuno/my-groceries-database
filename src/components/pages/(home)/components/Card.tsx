@@ -29,7 +29,7 @@ export default function BasicCard({ onClose }: BasicCardProps) {
   const [purchaseDate, setPurchaseDate] = React.useState<Dayjs | null>(null);
   const [productName, setProductName] = React.useState("");
   const [storeName, setStoreName] = React.useState("");
-  const [price, setPrice] = React.useState<number>(0); // 値段入力欄は一時的に削除
+  const [price] = React.useState<number>(0); // 値段入力欄は一時的に削除
   const { addGrocery } = useGroceryContext();
 
   const handleRegister = async () => {
@@ -45,13 +45,13 @@ export default function BasicCard({ onClose }: BasicCardProps) {
   };
 
   const handleProductNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setProductName(event.target.value);
   };
 
   const handleStoreNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setStoreName(event.target.value);
   };

@@ -22,16 +22,6 @@ interface Data {
   store: string; // 購入店舗名
 }
 
-function createData(
-  id: string,
-  productName: string,
-  purchaseDate: string,
-  price: number,
-  store: string
-): Data {
-  return { id, productName, purchaseDate, price, store };
-}
-
 // rows はプロバイダのデータに置き換える (below)
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -48,10 +38,10 @@ type Order = "asc" | "desc";
 
 function getComparator<Key extends keyof Data>(
   order: Order,
-  orderBy: Key
+  orderBy: Key,
 ): (
   a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
+  b: { [key in Key]: number | string },
 ) => number {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -95,7 +85,7 @@ const headCells: readonly HeadCell[] = [
 interface EnhancedTableHeadProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: keyof Data,
   ) => void;
   order: Order;
   orderBy: string;
@@ -149,7 +139,7 @@ export default function EnhancedTable({
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: keyof Data,
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -177,7 +167,7 @@ export default function EnhancedTable({
 
   const visibleRows = React.useMemo(
     () => [...filteredRows].sort(getComparator(order, orderBy)),
-    [order, orderBy, filteredRows]
+    [order, orderBy, filteredRows],
   );
 
   return (

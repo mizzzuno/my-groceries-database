@@ -68,7 +68,7 @@ export const useGroceryContext = () => {
   const context = useContext(GroceryContext);
   if (context === undefined) {
     throw new Error(
-      "useGroceryContext must be used within a GroceryDataProvider"
+      "useGroceryContext must be used within a GroceryDataProvider",
     );
   }
   return context;
