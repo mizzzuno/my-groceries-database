@@ -12,6 +12,8 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import { useGroceryContext } from "@/providers/GroceryDataProvider";
+import DeleteIconButton from "./DeleteIconButton";
+import EditIconButton from "./EditIconButton";
 
 // 表示したい列: 商品名, 購入日, 値段, 購入店舗
 interface Data {
@@ -229,6 +231,23 @@ export default function EnhancedTable({
                       }}
                     >
                       {row.productName}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      <EditIconButton
+                        id={row.id}
+                        name={row.productName}
+                        category={row.store}
+                        price={row.price}
+                        purchaseDate={row.purchaseDate}
+                      />
+                      <DeleteIconButton id={row.id} />
                     </TableCell>
                   </TableRow>
                 );
