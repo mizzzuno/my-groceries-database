@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import BasicTextFields from "./BasicTextFields";
 import BasicDatePicker from "./DatePicker";
 import { Dayjs } from "dayjs";
+import { useGroceryContext } from "@/providers/GroceryDataProvider";
 
 const style = {
   position: "absolute",
@@ -28,17 +29,17 @@ export default function BasicCard({ onClose }: BasicCardProps) {
   const [purchaseDate, setPurchaseDate] = React.useState<Dayjs | null>(null);
   const [productName, setProductName] = React.useState("");
   const [storeName, setStoreName] = React.useState("");
+  const [price] = React.useState<number>(0); // 値段入力欄は一時的に削除
+  const { addGrocery } = useGroceryContext();
 
-  const handleRegister = () => {
-    // 入力された内容をconsole.logで表示
-    console.log("購入データ:", {
-      purchaseDate: purchaseDate?.format("YYYY-MM-DD"),
-      productName,
-      storeName,
+  const handleRegister = async () => {
+    await addGrocery({
+      name: productName,
+      category: storeName,
+      price,
+      purchaseDate: purchaseDate ? purchaseDate.format("YYYY-MM-DD") : "",
     });
-
-    // Modalを閉じる
-    if (onClose) {
+    if (typeof onClose === "function") {
       onClose();
     }
   };
@@ -76,6 +77,7 @@ export default function BasicCard({ onClose }: BasicCardProps) {
           value={storeName}
           onChange={handleStoreNameChange}
         />
+        {/* 値段入力欄は一時的に非表示・未使用 */}
       </CardContent>
       <CardActions>
         <RegisterButton onClick={handleRegister} />

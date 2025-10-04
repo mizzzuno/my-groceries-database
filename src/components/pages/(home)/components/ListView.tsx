@@ -11,34 +11,18 @@ import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
+import { useGroceryContext } from "@/providers/GroceryDataProvider";
 
 // 表示したい列: 商品名, 購入日, 値段, 購入店舗
 interface Data {
-  id: number;
+  id: string;
   productName: string; // 商品名
   purchaseDate: string; // ISO 形式 or 任意の文字列
   price: number; // 値段 (数値)
   store: string; // 購入店舗名
 }
 
-function createData(
-  id: number,
-  productName: string,
-  purchaseDate: string,
-  price: number,
-  store: string,
-): Data {
-  return { id, productName, purchaseDate, price, store };
-}
-
-// ダミーデータ（必要に応じて API 連携に置き換える）
-const rows: Data[] = [
-  createData(1, "卵", "2024-06-01", 480, "スーパーA"),
-  createData(2, "牛乳", "2024-06-02", 1280, "ドラッグストアB"),
-  createData(3, "ハーゲンダッツ", "2024-06-02", 260, "コンビニC"),
-  createData(4, "卵", "2024-06-03", 980, "スーパーA"),
-  createData(5, "牛乳", "2024-06-04", 560, "ネットショップD"),
-];
+// rows はプロバイダのデータに置き換える (below)
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -162,12 +146,24 @@ export default function EnhancedTable({
     setOrderBy(property);
   };
 
+  const { groceries } = useGroceryContext();
+
+  const rows: Data[] = React.useMemo(() => {
+    return (groceries || []).map((g) => ({
+      id: g.id,
+      productName: g.name,
+      purchaseDate: g.purchaseDate,
+      price: g.price ?? 0,
+      store: g.category ?? "",
+    }));
+  }, [groceries]);
+
   const filteredRows = React.useMemo(() => {
     if (!selectedGrocery || selectedGrocery === "all") {
       return rows;
     }
     return rows.filter((row) => row.productName === selectedGrocery);
-  }, [selectedGrocery]);
+  }, [selectedGrocery, rows]);
 
   const visibleRows = React.useMemo(
     () => [...filteredRows].sort(getComparator(order, orderBy)),
