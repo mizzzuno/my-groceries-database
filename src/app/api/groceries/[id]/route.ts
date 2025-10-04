@@ -79,6 +79,9 @@ export async function PUT(req: Request, context: RouteContext) {
     return NextResponse.json(updated, { status: 200 });
   } catch (err) {
     console.error("PUT /groceries/[id] error:", err);
-    return NextResponse.json({ error: err instanceof Error ? err.message : "invalid request" }, { status: 400 });
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "invalid request" },
+      { status: 400 },
+    );
   }
 }
