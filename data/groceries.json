@@ -1,30 +1,44 @@
 [
   {
-    "id": "1759550081028-pigh5a7",
-    "name": "卵",
-    "category": "コンビニ",
-    "price": 0,
-    "purchaseDate": "2025-10-04"
-  },
-  {
     "id": "1759550411318-55my6cf",
     "name": "ハーゲンダッツ",
     "category": "コンビニA",
-    "price": 0,
+    "price": 320,
     "purchaseDate": "2025-10-03"
   },
   {
     "id": "1759550709487-h0br6r6",
     "name": "鶏胸肉",
     "category": "スーパーA",
-    "price": 0,
+    "price": 422,
     "purchaseDate": "2025-10-04"
   },
   {
     "id": "1759550876620-e4tlnqh",
     "name": "ポテチ",
     "category": "業務スーパー",
-    "price": 0,
+    "price": 86,
     "purchaseDate": "2025-10-01"
+  },
+  {
+    "id": "1759563712345-dimbjyt",
+    "name": "卵",
+    "category": "スーパーA",
+    "price": 300,
+    "purchaseDate": "2025-10-04"
+  },
+  {
+    "id": "1759566012514-6xxbpgs",
+    "name": "もち",
+    "category": "スーパーA",
+    "price": 270,
+    "purchaseDate": "2025-10-01"
+  },
+  {
+    "id": "1759566162746-oxvv4n3",
+    "name": "米",
+    "category": "スーパーA",
+    "price": 4880,
+    "purchaseDate": "2025-10-02"
   }
 ]

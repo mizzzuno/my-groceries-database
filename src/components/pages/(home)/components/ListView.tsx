@@ -12,6 +12,8 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import { useGroceryContext } from "@/providers/GroceryDataProvider";
+import DeleteIconButton from "./DeleteIconButton";
+import EditIconButton from "./EditIconButton";
 
 // 表示したい列: 商品名, 購入日, 値段, 購入店舗
 interface Data {
@@ -38,10 +40,10 @@ type Order = "asc" | "desc";
 
 function getComparator<Key extends keyof Data>(
   order: Order,
-  orderBy: Key,
+  orderBy: Key
 ): (
   a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string },
+  b: { [key in Key]: number | string }
 ) => number {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -85,7 +87,7 @@ const headCells: readonly HeadCell[] = [
 interface EnhancedTableHeadProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Data,
+    property: keyof Data
   ) => void;
   order: Order;
   orderBy: string;
@@ -139,7 +141,7 @@ export default function EnhancedTable({
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data,
+    property: keyof Data
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -167,7 +169,7 @@ export default function EnhancedTable({
 
   const visibleRows = React.useMemo(
     () => [...filteredRows].sort(getComparator(order, orderBy)),
-    [order, orderBy, filteredRows],
+    [order, orderBy, filteredRows]
   );
 
   return (
@@ -229,6 +231,23 @@ export default function EnhancedTable({
                       }}
                     >
                       {row.productName}
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      <EditIconButton
+                        id={row.id}
+                        name={row.productName}
+                        category={row.store}
+                        price={row.price}
+                        purchaseDate={row.purchaseDate}
+                      />
+                      <DeleteIconButton id={row.id} />
                     </TableCell>
                   </TableRow>
                 );
