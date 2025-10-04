@@ -6,6 +6,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useGroceryContext } from "@/providers/GroceryDataProvider";
 
 interface BasicSelectProps {
   value: string;
@@ -16,6 +17,22 @@ export default function BasicSelect({ value, onChange }: BasicSelectProps) {
   const handleChange = (event: SelectChangeEvent) => {
     onChange(event.target.value as string);
   };
+
+  const { groceries } = useGroceryContext();
+
+  const productNames = React.useMemo(() => {
+    if (!groceries || groceries.length === 0) return [] as string[];
+    const seen = new Set<string>();
+    const list: string[] = [];
+    for (const g of groceries) {
+      if (!g || !g.name) continue;
+      if (!seen.has(g.name)) {
+        seen.add(g.name);
+        list.push(g.name);
+      }
+    }
+    return list;
+  }, [groceries]);
 
   return (
     <Box
@@ -53,9 +70,11 @@ export default function BasicSelect({ value, onChange }: BasicSelectProps) {
           }}
         >
           <MenuItem value="all">全て表示</MenuItem>
-          <MenuItem value="卵">卵</MenuItem>
-          <MenuItem value="牛乳">牛乳</MenuItem>
-          <MenuItem value="ハーゲンダッツ">ハーゲンダッツ</MenuItem>
+          {productNames.map((name) => (
+            <MenuItem key={name} value={name}>
+              {name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>
