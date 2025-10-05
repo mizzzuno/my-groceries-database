@@ -30,5 +30,14 @@ export default function Home() {
     return null;
   }
 
-  return <>{isLoggedIn ? <HomePage /> : <Login mode="signin" />}</>;
+  return (
+    <>
+      {isLoggedIn ? (
+        <HomePage />
+      ) : (
+        // pass a callback so Login can notify this parent when auth succeeds
+        <Login mode="signin" onAuthSuccess={() => setIsLoggedIn(true)} />
+      )}
+    </>
+  );
 }
