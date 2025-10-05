@@ -178,7 +178,12 @@ export default function Login({
         if (!token) {
           const maybeMsg =
             data?.detail || data?.message || JSON.stringify(data);
-          throw new Error(maybeMsg || "サイン後にトークンが返されませんでした");
+          throw new Error(
+            maybeMsg ||
+              (mode === "signup"
+                ? "サインアップ後にトークンが返されませんでした"
+                : "サインイン後にトークンが返されませんでした")
+          );
         }
 
         localStorage.setItem("token", token);
