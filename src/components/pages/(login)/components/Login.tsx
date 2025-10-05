@@ -1,27 +1,211 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-export default function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
-  const [isSignup, setIsSignup] = useState(mode === 'signup');
+export default function Login({
+  mode = "signin",
+}: {
+  mode?: "signin" | "signup";
+}) {
+  const router = useRouter();
+  const [isSignup, setIsSignup] = useState(mode === "signup");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // same-origin proxy endpoints (implemented as Next.js API routes)
+  const PROXY_TOKEN = "/api/auth/token";
+  const PROXY_LOGIN = "/api/auth/login";
+  const PROXY_SIGNUP = "/api/auth/signup";
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      let data: any = null;
+
+      // 1) Try token endpoint (form-encoded)
+      try {
+        const params = new URLSearchParams();
+        params.append("username", email);
+        params.append("password", password);
+
+        const res1 = await fetch(PROXY_TOKEN, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: params.toString(),
+        });
+
+        if (res1.ok) {
+          data = await res1.json();
+        } else {
+          const t = await res1.text();
+          console.debug("token endpoint failed:", res1.status, t);
+        }
+      } catch (err) {
+        console.debug("token endpoint request error:", err);
+      }
+
+      // 2) If token endpoint didn't return usable data, try JSON login endpoint
+      if (!data) {
+        const res2 = await fetch(PROXY_LOGIN, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (!res2.ok) {
+          const text = await res2.text();
+          throw new Error(text || `HTTP ${res2.status}`);
+        }
+
+        data = await res2.json();
+      }
+
+      const token =
+        data?.access_token ||
+        data?.token ||
+        data?.accessToken ||
+        data?.idToken ||
+        null;
+
+      if (!token) {
+        const maybeMsg = data?.detail || data?.message || JSON.stringify(data);
+        throw new Error(maybeMsg || "トークンが返されませんでした");
+      }
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("isLoggedIn", "true");
+      // navigate to home; force a reload to ensure parent client component
+      // re-reads localStorage and shows the HomePage when we're already on '/'
+      router.push("/");
+      try {
+        // full reload ensures useEffect in parent picks up new token
+        window.location.reload();
+      } catch (e) {
+        // fallback: refresh router cache if reload isn't available
+        // router.refresh may be available depending on Next version
+        if (typeof (router as any).refresh === "function") {
+          (router as any).refresh();
+        }
+      }
+    } catch (err: any) {
+      setError(err?.message || "ログインに失敗しました");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(PROXY_SIGNUP, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, password }),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || `HTTP ${res.status}`);
+      }
+
+      // サインアップ成功後は自動でログインを試み、ホームに遷移させる
+      try {
+        let data: any = null;
+
+        // 1) Try token endpoint (form-encoded)
+        try {
+          const params = new URLSearchParams();
+          params.append("username", email);
+          params.append("password", password);
+
+          const res1 = await fetch(PROXY_TOKEN, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString(),
+          });
+
+          if (res1.ok) {
+            data = await res1.json();
+          } else {
+            const t = await res1.text();
+            console.debug("token endpoint failed:", res1.status, t);
+          }
+        } catch (err) {
+          console.debug("token endpoint request error:", err);
+        }
+
+        // 2) If token endpoint didn't return usable data, try JSON login endpoint
+        if (!data) {
+          const res2 = await fetch(PROXY_LOGIN, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+
+          if (!res2.ok) {
+            const text = await res2.text();
+            throw new Error(text || `HTTP ${res2.status}`);
+          }
+
+          data = await res2.json();
+        }
+
+        const token =
+          data?.access_token ||
+          data?.token ||
+          data?.accessToken ||
+          data?.idToken ||
+          null;
+
+        if (!token) {
+          const maybeMsg =
+            data?.detail || data?.message || JSON.stringify(data);
+          throw new Error(maybeMsg || "サイン後にトークンが返されませんでした");
+        }
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("isLoggedIn", "true");
+        router.push("/");
+        try {
+          window.location.reload();
+        } catch (e) {
+          if (typeof (router as any).refresh === "function") {
+            (router as any).refresh();
+          }
+        }
+      } catch (err: any) {
+        // ログイン試行に失敗した場合はサインアップ後にログイン画面へ戻す
+        setIsSignup(false);
+        setError(
+          err?.message || "自動ログインに失敗しました。ログインしてください。"
+        );
+      }
+    } catch (err: any) {
+      setError(err?.message || "サインアップに失敗しました");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* メインコンテンツ */}
       <div className="flex flex-1 items-center justify-center mt-[-50px]">
         <div className="container mx-auto px-4 md:flex md:space-x-8">
-          {/* 左側ロゴとテキスト */}
+          {/* テキスト */}
           <div className="md:w-1/2 flex flex-col items-center justify-center mb-8 md:mb-0">
-            <Image
-              src="/images/Logo.jpg"
-              alt="Logo"
-              width={300}
-              height={300}
-              className="mb-4 object-contain"
-            />
-            <h1 className="text-4xl font-bold mb-2">Welcome to My Site</h1>
+            <h1 className="text-4xl font-bold mb-2 text-center">
+              Welcome to <br />
+              Smart Shopper!!
+            </h1>
             <p className="text-lg text-gray-600">
-              Join us and experience the best service.
+              Join us and become a Smart Shopper!!
             </p>
           </div>
 
@@ -30,51 +214,67 @@ export default function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' 
             {!isSignup ? (
               <div className="bg-white shadow-md rounded-lg p-6">
                 <h2 className="text-2xl font-semibold mb-4">Login</h2>
-                <form>
+                <form onSubmit={handleSignIn}>
                   <div className="mb-4">
-                    <label className="block text-gray-700 mb-1">Username</label>
+                    <label className="block text-gray-700 mb-1">Email</label>
                     <input
                       type="text"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                      required
                     />
                   </div>
                   <div className="mb-4">
                     <label className="block text-gray-700 mb-1">Password</label>
                     <input
                       type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                      required
                     />
                   </div>
                   <button
                     type="submit"
                     className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+                    disabled={loading}
                   >
-                    Login
+                    {loading ? "Signing in..." : "Login"}
                   </button>
+                  {error && (
+                    <p className="text-sm text-red-600 mt-2">{error}</p>
+                  )}
                 </form>
                 <button
                   onClick={() => setIsSignup(true)}
                   className="w-full mt-3 bg-gray-300 text-gray-800 py-2 rounded hover:bg-gray-400 transition"
                 >
-                  Sign Up
+                  or Sign Up
                 </button>
               </div>
             ) : (
               <div className="bg-white shadow-md rounded-lg p-6">
                 <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
-                <form>
+                <form onSubmit={handleSignUp}>
                   <div className="mb-4">
-                    <label className="block text-gray-700 mb-1">Username</label>
+                    <label className="block text-gray-700 mb-1">Email</label>
                     <input
                       type="text"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-green-300"
+                      required
                     />
                   </div>
                   <div className="mb-4">
                     <label className="block text-gray-700 mb-1">Password</label>
                     <input
                       type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-green-300"
+                      required
                     />
                   </div>
                   <div className="mb-4">
@@ -87,15 +287,19 @@ export default function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' 
                     />
                   </div>
                   <p className="text-sm text-gray-500 mb-2">
-                    Your password must be at least 8 characters, not too common, and
-                    not entirely numeric.
+                    Your password must be at least 8 characters, not too common,
+                    and not entirely numeric.
                   </p>
                   <button
                     type="submit"
                     className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+                    disabled={loading}
                   >
-                    Sign Up
+                    {loading ? "Signing up..." : "Sign Up"}
                   </button>
+                  {error && (
+                    <p className="text-sm text-red-600 mt-2">{error}</p>
+                  )}
                 </form>
                 <button
                   onClick={() => setIsSignup(false)}
@@ -108,34 +312,6 @@ export default function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' 
           </div>
         </div>
       </div>
-
-{ /* -----修正箇所----- */ }
-
-      {/* フッター 
-      <footer className="bg-gray-100 py-4 text-center mt-auto">
-        <span className="text-gray-500">卒研：2025</span>
-        <span className="text-gray-500 mx-2">|</span>
-        <span>Created by</span>
-        <span className="font-bold mx-2">0AAA2222</span>
-        <span className="text-gray-500 mx-2">|</span>
-        <span>ABCDE FGH IJKL (アイウエ オカ)</span>
-      </footer>
-      */}
-{ /* -----ここまで-----*/ }
     </div>
   );
 }
-
-
-
-
-// //component
-// //ここでログインページを作成し、sigh-inとupでそれぞれのモードでimportして使う
-// //参考URL https://github.com/nextjs/saas-starter/blob/main/app/(login)/login.tsx
-// export default function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
-//   return (
-//     <>
-//       <h1>login</h1>
-//     </>
-//   );
-// }
