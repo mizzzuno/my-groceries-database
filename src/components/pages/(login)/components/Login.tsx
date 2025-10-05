@@ -101,8 +101,9 @@ export default function Login({
       // re-reads localStorage and shows the HomePage when we're already on '/'
       router.push("/");
       // Use router.refresh() to ensure parent client component re-reads localStorage
-      if (typeof (router as any).refresh === "function") {
-        (router as any).refresh();
+      const maybeRouter = router as unknown as { refresh?: () => void };
+      if (typeof maybeRouter.refresh === "function") {
+        maybeRouter.refresh();
       }
     } catch (err) {
       setError(getErrorMessage(err, "ログインに失敗しました"));
@@ -182,7 +183,7 @@ export default function Login({
             maybeMsg ||
               (mode === "signup"
                 ? "サインアップ後にトークンが返されませんでした"
-                : "サインイン後にトークンが返されませんでした")
+                : "サインイン後にトークンが返されませんでした"),
           );
         }
 
