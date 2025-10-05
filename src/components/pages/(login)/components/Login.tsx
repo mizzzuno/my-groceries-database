@@ -4,8 +4,10 @@ import { useRouter } from "next/navigation";
 
 export default function Login({
   mode = "signin",
+  onAuthSuccess,
 }: {
   mode?: "signin" | "signup";
+  onAuthSuccess?: () => void;
 }) {
   const router = useRouter();
   type AuthData = {
@@ -97,6 +99,15 @@ export default function Login({
 
       localStorage.setItem("token", token);
       localStorage.setItem("isLoggedIn", "true");
+      // notify parent that auth succeeded so it can re-render to HomePage
+      try {
+        if (onAuthSuccess) {
+          onAuthSuccess();
+        }
+      } catch {
+        /* ignore errors from parent callback */
+      }
+
       // navigate to home; force a reload to ensure parent client component
       // re-reads localStorage and shows the HomePage when we're already on '/'
       router.push("/");
@@ -189,6 +200,15 @@ export default function Login({
 
         localStorage.setItem("token", token);
         localStorage.setItem("isLoggedIn", "true");
+        // notify parent and navigate
+        try {
+          if (onAuthSuccess) {
+            onAuthSuccess();
+          }
+        } catch {
+          /* ignore */
+        }
+
         router.push("/");
         try {
           window.location.reload();

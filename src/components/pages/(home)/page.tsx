@@ -3,6 +3,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import BasicModal from "@/components/pages/(home)/components/Modal";
+import LogoutIconButton from "@/components/pages/(home)/components/LogoutIconButton";
 
 const ListView = dynamic(
   () => import("@/components/pages/(home)/components/ListView"),
@@ -25,6 +26,7 @@ export default function HomePage() {
       <div className="flex justify-center items-center">
         <BasicSelect value={selectedGrocery} onChange={setSelectedGrocery} />
         <BasicModal />
+        <LogoutIconButton />
       </div>
       <ListView selectedGrocery={selectedGrocery} />
     </>
