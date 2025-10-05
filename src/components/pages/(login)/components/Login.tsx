@@ -100,15 +100,9 @@ export default function Login({
       // navigate to home; force a reload to ensure parent client component
       // re-reads localStorage and shows the HomePage when we're already on '/'
       router.push("/");
-      try {
-        // full reload ensures useEffect in parent picks up new token
-        window.location.reload();
-      } catch {
-        // fallback: refresh router cache if reload isn't available
-        const maybeRouter = router as unknown as { refresh?: () => void };
-        if (typeof maybeRouter.refresh === "function") {
-          maybeRouter.refresh();
-        }
+      // Use router.refresh() to ensure parent client component re-reads localStorage
+      if (typeof (router as any).refresh === "function") {
+        (router as any).refresh();
       }
     } catch (err) {
       setError(getErrorMessage(err, "ログインに失敗しました"));
