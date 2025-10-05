@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const BACKEND_API = "http://localhost:8000/api/groceries";
+const BACKEND_API = "http://localhost:8000/api/v1/receipts";
 
 type RouteContext = {
   params?: { id?: string } | Promise<{ id?: string }>;

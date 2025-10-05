@@ -47,5 +47,54 @@
     "category": "スーパーA",
     "price": 382,
     "purchaseDate": "2025-10-02"
+  },
+  {
+    "id": "1759636712948-4pjgaxz",
+    "name": "鯖",
+    "category": "スーパーB",
+    "price": 398,
+    "purchaseDate": "2021-02-15"
+  },
+  {
+    "id": "1759636854287-65cwq96",
+    "name": "みかん",
+    "category": "スーパーC",
+    "price": 198,
+    "purchaseDate": "2024-05-18"
+  },
+  {
+    "id": "1759637100097-dau1tsx",
+    "name": "卵",
+    "category": "コンビニB",
+    "price": 500,
+    "purchaseDate": "2025-02-02"
+  },
+  {
+    "id": "1759640036752-oonz6q0",
+    "name": "米",
+    "category": "スーパーA",
+    "price": 5000,
+    "purchaseDate": "2025-08-31"
+  },
+  {
+    "id": "1759642237828-gomifw0",
+    "name": "油",
+    "category": "コンビニC",
+    "price": 300,
+    "purchaseDate": "2021-03-18"
+  },
+  {
+    "id": "1759642876274-143dghl",
+    "name": "みかん",
+    "category": "スーパーB",
+    "price": 100,
+    "purchaseDate": "2025-02-02"
+  },
+  {
+    "id": "1759643186406-6o3mq3p",
+    "name": "みかん",
+    "category": "スーパーB",
+    "price": 300,
+    "purchaseDate": "2025-02-22"
   }
 ]
