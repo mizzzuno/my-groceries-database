@@ -7,7 +7,7 @@ export default function LogoutIconButton() {
   const handleLogout = async () => {
     try {
       // try to inform server (if a logout endpoint exists). ignore errors.
-      await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+      await fetch("/api/auth/logout", { method: "POST" });
     } catch {
       // ignore
     }
