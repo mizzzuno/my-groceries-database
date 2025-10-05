@@ -8,14 +8,14 @@ export default function LogoutIconButton() {
     try {
       // try to inform server (if a logout endpoint exists). ignore errors.
       await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
-    } catch (e) {
+    } catch {
       // ignore
     }
 
     try {
       localStorage.removeItem("token");
       localStorage.removeItem("isLoggedIn");
-    } catch (e) {
+    } catch {
       // ignore localStorage errors
     }
 

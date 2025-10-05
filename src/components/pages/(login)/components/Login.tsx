@@ -101,7 +101,9 @@ export default function Login({
       localStorage.setItem("isLoggedIn", "true");
       // notify parent that auth succeeded so it can re-render to HomePage
       try {
-        onAuthSuccess && onAuthSuccess();
+        if (onAuthSuccess) {
+          onAuthSuccess();
+        }
       } catch {
         /* ignore errors from parent callback */
       }
@@ -192,7 +194,7 @@ export default function Login({
             maybeMsg ||
               (mode === "signup"
                 ? "サインアップ後にトークンが返されませんでした"
-                : "サインイン後にトークンが返されませんでした")
+                : "サインイン後にトークンが返されませんでした"),
           );
         }
 
@@ -200,7 +202,9 @@ export default function Login({
         localStorage.setItem("isLoggedIn", "true");
         // notify parent and navigate
         try {
-          onAuthSuccess && onAuthSuccess();
+          if (onAuthSuccess) {
+            onAuthSuccess();
+          }
         } catch {
           /* ignore */
         }
@@ -220,8 +224,8 @@ export default function Login({
         setError(
           getErrorMessage(
             err,
-            "自動ログインに失敗しました。ログインしてください。"
-          )
+            "自動ログインに失敗しました。ログインしてください。",
+          ),
         );
       }
     } catch (err) {
