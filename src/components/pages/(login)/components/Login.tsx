@@ -8,6 +8,24 @@ export default function Login({
   mode?: "signin" | "signup";
 }) {
   const router = useRouter();
+  type AuthData = {
+    access_token?: string;
+    token?: string;
+    accessToken?: string;
+    idToken?: string;
+    detail?: string;
+    message?: string;
+    [key: string]: unknown;
+  };
+
+  const getErrorMessage = (err: unknown, fallback: string) => {
+    if (typeof err === "string") return err;
+    if (err && typeof err === "object") {
+      const maybe = err as { message?: unknown };
+      if (typeof maybe.message === "string") return maybe.message;
+    }
+    return fallback;
+  };
   const [isSignup, setIsSignup] = useState(mode === "signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +43,7 @@ export default function Login({
     setError(null);
 
     try {
-      let data: any = null;
+      let data: AuthData | null = null;
 
       // 1) Try token endpoint (form-encoded)
       try {
@@ -85,15 +103,15 @@ export default function Login({
       try {
         // full reload ensures useEffect in parent picks up new token
         window.location.reload();
-      } catch (e) {
+      } catch {
         // fallback: refresh router cache if reload isn't available
-        // router.refresh may be available depending on Next version
-        if (typeof (router as any).refresh === "function") {
-          (router as any).refresh();
+        const maybeRouter = router as unknown as { refresh?: () => void };
+        if (typeof maybeRouter.refresh === "function") {
+          maybeRouter.refresh();
         }
       }
-    } catch (err: any) {
-      setError(err?.message || "ログインに失敗しました");
+    } catch (err) {
+      setError(getErrorMessage(err, "ログインに失敗しました"));
     } finally {
       setLoading(false);
     }
@@ -116,7 +134,7 @@ export default function Login({
 
       // サインアップ成功後は自動でログインを試み、ホームに遷移させる
       try {
-        let data: any = null;
+        let data: AuthData | null = null;
 
         // 1) Try token endpoint (form-encoded)
         try {
@@ -174,20 +192,24 @@ export default function Login({
         router.push("/");
         try {
           window.location.reload();
-        } catch (e) {
-          if (typeof (router as any).refresh === "function") {
-            (router as any).refresh();
+        } catch {
+          const maybeRouter = router as unknown as { refresh?: () => void };
+          if (typeof maybeRouter.refresh === "function") {
+            maybeRouter.refresh();
           }
         }
-      } catch (err: any) {
+      } catch (err) {
         // ログイン試行に失敗した場合はサインアップ後にログイン画面へ戻す
         setIsSignup(false);
         setError(
-          err?.message || "自動ログインに失敗しました。ログインしてください。"
+          getErrorMessage(
+            err,
+            "自動ログインに失敗しました。ログインしてください。",
+          ),
         );
       }
-    } catch (err: any) {
-      setError(err?.message || "サインアップに失敗しました");
+    } catch (err) {
+      setError(getErrorMessage(err, "サインアップに失敗しました"));
     } finally {
       setLoading(false);
     }

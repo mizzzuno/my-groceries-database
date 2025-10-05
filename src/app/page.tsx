@@ -19,7 +19,7 @@ export default function Home() {
       } else {
         setIsLoggedIn(false);
       }
-    } catch (e) {
+    } catch {
       // localStorage にアクセスできない可能性を考慮
       setIsLoggedIn(false);
     }
