@@ -194,7 +194,7 @@ export default function Login({
             maybeMsg ||
               (mode === "signup"
                 ? "サインアップ後にトークンが返されませんでした"
-                : "サインイン後にトークンが返されませんでした"),
+                : "サインイン後にトークンが返されませんでした")
           );
         }
 
@@ -224,8 +224,8 @@ export default function Login({
         setError(
           getErrorMessage(
             err,
-            "自動ログインに失敗しました。ログインしてください。",
-          ),
+            "自動ログインに失敗しました。ログインしてください。"
+          )
         );
       }
     } catch (err) {
